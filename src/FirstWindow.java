@@ -2,8 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
 
-public class MyFrame extends JFrame implements ActionListener {
+public class FirstWindow extends JFrame implements ActionListener {
+
     JLabel obrazek = new JLabel();
     ImageIcon palma = new ImageIcon("/Users/zuzia/Library/Mobile Documents/com~apple~CloudDocs/MINE/JAVA/Positive vibes/src/palma.jpg");
 
@@ -14,32 +17,33 @@ public class MyFrame extends JFrame implements ActionListener {
     JPanel pinkPanel = new JPanel();
     JPanel whitePanel = new JPanel();
     JButton button = new JButton();
+    JTextArea textArea = new JTextArea();
 
-    JLabel przyklepane = new JLabel();
-    ImageIcon thumb = new ImageIcon("/Users/zuzia/Library/Mobile Documents/com~apple~CloudDocs/MINE/JAVA/Positive vibes/src/IMG_2329.GIF");
-
-
-    MyFrame(){
+    FirstWindow(){
         obrazek.setIcon(palma);
         obrazek.setVerticalAlignment(JLabel.TOP);
-        //obrazek.setHorizontalAlignment(JLabel.CENTER);
         obrazek.setBounds(300, 0, 354, 354);
         obrazek.setVisible(true);
 
         obrazekFlaming.setIcon(flaming);
         obrazekFlaming.setBounds(50, 150, 240, 360);
 
-
-        przyklepane.setIcon(thumb);
-        przyklepane.setVerticalAlignment(JLabel.BOTTOM);
-        przyklepane.setHorizontalAlignment(JLabel.RIGHT);
-        przyklepane.setBounds(350, 500, 283, 283);
-        przyklepane.setVisible(false);
-
         txt.setForeground(Color.white);
         txt.setFont(new Font("Papyrus", Font.ITALIC, 40));
         txt.setHorizontalAlignment(JLabel.CENTER);
         txt.setBounds(100, 150, 500, 150);
+
+        textArea.setBounds(100, 300, 500, 300);
+        textArea.setLineWrap(true);
+        textArea.setFont(new Font("NoteWorthy", Font.PLAIN, 40));
+
+        button.setBounds(200, 700, 300, 50);
+        button.addActionListener(this);
+        button.setText("Przyklep swoją szczęśliwą myśl!");
+        button.setFocusable(false);
+        button.setBackground(Color.red);
+        button.setForeground(Color.red);
+        button.setFont(new Font("NoteWorthy", Font.PLAIN, 20));
 
         pinkPanel.setBackground(Color.pink);
         pinkPanel.setBounds(0,0,700, 900);
@@ -49,33 +53,35 @@ public class MyFrame extends JFrame implements ActionListener {
         whitePanel.setBounds(700, 0, 700, 900);
         whitePanel.setLayout(null);
 
-        button.setBounds(200, 700, 300, 50);
-        button.addActionListener(this);
-        button.setText("Przyklep swoją szczęśliwą myśl!");
-        button.setBackground(Color.red);
-        button.setForeground(Color.white);
-        button.setFont(new Font("NoteWorthy", Font.PLAIN, 20));
-        button.setBorder(BorderFactory.createRaisedSoftBevelBorder());
-
         this.setTitle("POSITIVE VIBES :)");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(null);
+        this.setLayout(new GridLayout());
         this.setSize(1400,900);
         this.setVisible(true);
         this.add(pinkPanel);
         this.add(whitePanel);
         whitePanel.add(obrazek);
         whitePanel.add(obrazekFlaming);
-        whitePanel.add(przyklepane);
         pinkPanel.add(txt);
         pinkPanel.add(button);
+        pinkPanel.add(textArea);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==button){
-            przyklepane.setVisible(true);
             System.out.println("Have a nice day!");
+            try {
+                FileWriter plik = new FileWriter("/Users/zuzia/Library/Mobile Documents/com~apple~CloudDocs/MINE/JAVA/Positive vibes/src/teksty", true);
+                plik.append(textArea.getText() + "\n");
+                plik.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+
+            this.dispose();
+
+            HappyMessage happyMessage = new HappyMessage();
         }
     }
 }
